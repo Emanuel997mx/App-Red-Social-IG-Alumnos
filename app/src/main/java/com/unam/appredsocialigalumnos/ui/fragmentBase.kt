@@ -12,10 +12,11 @@ import androidx.viewbinding.ViewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.unam.appredsocialigalumnos.R
 
-abstract class fragmentBase <VB : ViewBinding>(
+abstract class FragmentBase <VB : ViewBinding>(
     layout : Int,
     private val setUpBinding : (View) -> VB
 ): Fragment(layout){
+
     protected var progressDialog : Dialog? = null
     protected var errorDialog : MaterialAlertDialogBuilder? = null
 
@@ -64,7 +65,7 @@ abstract class fragmentBase <VB : ViewBinding>(
     }
 
     private fun loadingDialog(context: Context): Dialog {
-        val progressDialog = Dialog(context, R.style.FullScreenDialog)
+        val progressDialog = Dialog(context,R.style.FullScreenDialog)
         progressDialog.let {
             it.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             it.setContentView(R.layout.progress_dialog)
