@@ -1,7 +1,6 @@
 package com.unam.appredsocialigalumnos.ui
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -13,20 +12,19 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.unam.appredsocialigalumnos.R
 import com.unam.appredsocialigalumnos.databinding.ActivityNavigationBinding
 
-class NavigationActivity: AppCompatActivity() {
+class NavigationActivity : AppCompatActivity() {
+
     lateinit var binding: ActivityNavigationBinding
     private lateinit var navController: NavController
-    private lateinit var bottomNav: BottomNavigationView
+    private lateinit var bottomNav : BottomNavigationView
 
-    private val navHost: NavHostFragment by lazy {
+    private val navHost : NavHostFragment by lazy {
         supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setTheme(R.style.Theme_AppRedSocialIGAlumnos)
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_navigation)
         initUI()
     }
@@ -36,16 +34,16 @@ class NavigationActivity: AppCompatActivity() {
         bottomNav = findViewById(R.id.nav_view)
         binding.navView.setupWithNavController(navController)
 
-        navController.addOnDestinationChangedListener { _: NavController?, _: NavDestination?, arguments: Bundle? ->
-
+        navController.addOnDestinationChangedListener {
+                _: NavController?, _: NavDestination?, arguments: Bundle? ->
             var showAppBar = false
-            if (arguments != null) {
+            if (arguments != null){
                 showAppBar = arguments.getBoolean("ShowAppBar", false)
             }
-            if(showAppBar){
+            if (showAppBar){
                 binding.appBarLayout.visibility = View.VISIBLE
             }else{
-                binding.appBarLayout.visibility = View.VISIBLE
+                binding.appBarLayout.visibility = View.GONE
             }
         }
     }

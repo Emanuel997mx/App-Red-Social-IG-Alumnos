@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.unam.appredsocialigalumnos.ui.homeFragment"
+        android:name="com.unam.appredsocialigalumnos.ui.HomeFragment"
         tools:layout="@layout/fragment_home">
         <argument
             android:name="ShowAppBar"
@@ -16,11 +16,20 @@
 
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.unam.appredsocialigalumnos.ui.searchFragment"
+        android:name="com.unam.appredsocialigalumnos.ui.SearchFragment"
         tools:layout="@layout/fragment_search">
         <argument
             android:name="ShowAppBar"
             android:defaultValue="true"/>
     </fragment>
+    <activity
+        android:id="@+id/camaraActivity"
+        android:name="com.unam.appredsocialigalumnos.ui.Camara"
+        android:label="activity_camara"
+        tools:layout="@layout/activity_camara" >
+        <argument
+            android:name="ShowAppBar"
+            android:defaultValue="true"/>
+    </activity>
 
 </navigation>
