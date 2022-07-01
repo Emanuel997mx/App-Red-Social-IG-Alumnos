@@ -4,13 +4,22 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.preferencesKey
+import androidx.datastore.preferences.createDataStore
+import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.unam.appredsocialigalumnos.R
 import com.unam.appredsocialigalumnos.databinding.FragmentHostLoginBinding
+import com.unam.appredsocialigalumnos.network.FirestoreService
 import com.unam.appredsocialigalumnos.util.findNavControllerSafely
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 const val USERNAME_KEY = "username_key"
 
@@ -18,10 +27,15 @@ class LoginFragment :  FragmentBase<FragmentHostLoginBinding>(
     R.layout.fragment_host_login, FragmentHostLoginBinding::bind) {
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var firestoreService: FirestoreService
+
+    private lateinit var dataStore: DataStore<Preferences>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = Firebase.auth
+        firestoreService = FirestoreService(FirebaseFirestore.getInstance())
+        dataStore = requireContext().createDataStore("settings")
     }
 
     override fun onStart() {
@@ -37,10 +51,19 @@ class LoginFragment :  FragmentBase<FragmentHostLoginBinding>(
     }
 
     override fun initElements() {
+        lifecycleScope.launch {
+            val email = read("email")
+            val password = read("password")
+            binding.usernameTextField.editText?.setText(email)
+            binding.passwordTextField.editText?.setText(password)
+
+
+        }
         binding.tvSignUp.setOnClickListener {
             findNavControllerSafely()?.navigate(R.id.action_loginFragment_to_signUpFragment)
         }
         binding.btnLogin.setOnClickListener {
+            showAlert()
             val email = binding.usernameTextField.editText?.text.toString()
             val password = binding.passwordTextField.editText?.text.toString()
             if (email.isNotEmpty() && password.isNotEmpty()){
@@ -73,7 +96,14 @@ class LoginFragment :  FragmentBase<FragmentHostLoginBinding>(
         val intent = Intent(requireContext(), NavigationActivity::class.java)
         intent.putExtra(USERNAME_KEY, user)
         startActivity(intent)
+        hideAlert()
         requireActivity().finish()
+    }
+
+    private suspend fun read(key: String): String?{
+        val dataStorekey = preferencesKey<String>(key)
+        val preferences = dataStore.data.first()
+        return preferences[dataStorekey]
     }
 
     companion object{
